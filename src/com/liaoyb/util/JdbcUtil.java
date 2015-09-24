@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import org.apache.commons.mail.EmailException;
+
 import com.sun.rowset.CachedRowSetImpl;
 
 public class JdbcUtil {
@@ -19,11 +21,11 @@ public class JdbcUtil {
 	private static String url = null;
 	private static String username = null;
 	private static String password = null;
-	private static Connection conn = null;
+	private static ConnectionPool connPool;
 	static {
 		Properties prop = new Properties();
 
-		try {
+		  try {
 
 			prop.load(JdbcUtil.class.getClassLoader().getResourceAsStream(
 					"mysql.properties"));
@@ -32,29 +34,44 @@ public class JdbcUtil {
 			url = prop.getProperty("url");
 			username = prop.getProperty("username");
 			password = prop.getProperty("password");
-			Class.forName(driver);
+		    connPool=new ConnectionPool(driver, url, username, password);
+		 
+				connPool.createPool();
+				
+				
+				
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("数据库连接失败");
+					Mail.sendMail("数据库连接失败");
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(url + username + password);
 
-		} catch (FileNotFoundException e) {
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			System.out.println("加载驱动失败");
-			e.printStackTrace();
-		}
+	
 
 	}
 
 	public Connection getConnection() {
-		if (conn == null)
-			try {
-				conn = DriverManager.getConnection(url, username, password);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		Connection conn=null;
+		try {
+			conn=connPool.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return conn;
 	}
 
@@ -74,7 +91,9 @@ public class JdbcUtil {
 
 		try {
 			conn = getConnection();
-
+			if(conn==null){
+				Mail.sendMail("连接为空");
+			}
 			pStatement = conn.prepareStatement(sql);
 			// 设置参数
 			setParameters(pStatement, parameters);
@@ -150,7 +169,9 @@ public class JdbcUtil {
 				e.printStackTrace();
 			}
 		}
-		// 释放conn
+		
+		// 归还conn
+		connPool.returnConnection(conn);
 
 	}
 

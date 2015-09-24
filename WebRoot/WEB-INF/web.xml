@@ -4,8 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
   <servlet>
-    <servlet-name>LoginServelet</servlet-name>
-    <servlet-class>com.liaoyb.servlet.LoginServelet</servlet-class>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.liaoyb.servlet.LoginServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>DiskDataServlet</servlet-name>
@@ -67,8 +67,8 @@
 
 
   <servlet-mapping>
-    <servlet-name>LoginServelet</servlet-name>
-    <url-pattern>/servlet/LoginServelet</url-pattern>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/servlet/LoginServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>DiskDataServlet</servlet-name>

@@ -24,7 +24,7 @@ import com.liaoyb.util.ServletUtil;
  * @author Liao-Pc
  *
  */
-public class LoginServelet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	private Map<HttpSession,String >users=new HashMap<HttpSession,String>();
 	
 	private IUserService userServ=new UserService();

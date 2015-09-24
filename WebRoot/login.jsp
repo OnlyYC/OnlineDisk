@@ -47,7 +47,7 @@
 
 
 		function login(){
-			var url=$("#urlpath").text()+"/servlet/LoginServelet";
+			var url=$("#urlpath").text()+"/servlet/LoginServlet";
 			if(check()){
 				//验证成功
 

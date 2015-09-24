@@ -1,4 +1,5 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" isErrorPage="true" %>
+<%@page import="java.io.FileOutputStream"%>
+<%@ page language="java" import="java.util.*,java.io.*,org.apache.commons.io.IOUtils,com.liaoyb.util.*" pageEncoding="UTF-8" isErrorPage="true" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -28,6 +29,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    //设置isErrorPage="true"，可以拿到内置对象exception
    exception.printStackTrace(response.getWriter());//向页面输出
   
+   
+   //发送邮件
+   
+   
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+   
+   exception.printStackTrace(pw);
+
+   Mail.sendMail(sw.toString());
    %>
   </body>
 </html>
